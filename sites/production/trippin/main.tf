@@ -1,24 +1,15 @@
-provider "google" {
- credentials = "${file("service_account.json")}"
- project     = "composite-keel-269505"
- region      = "us-west1"
-}
-
-terraform {
-  required_providers {
-    helm = "~> 0.10.0"
-  }
-}
 locals {
-    chart_tag = "0.1.0"
+  repository = "gcr.io/composite-keel-269505/trippin"
+  image_tag  = "9a442be8769c9ec2f43008b3898c72b9e42f9fec"
+  chart_tag  = "0.1.0"
 }
 
-resource "helm_release" "trippin" {
-  repository = "https://trippin-chartmuseum.storage.googleapis.com"
+resource "helm_release" "auth" {
+  repository = "https://trippinchartmuseum.storage.googleapis.com"
   keyring    = "/dev/null"
 
-  name    = "trippin"
-  chart   = "trippin"
+  name    = "auth"
+  chart   = "auth"
   version = local.chart_tag
 
   timeout       = 300
