@@ -4,6 +4,12 @@ provider "google" {
  region      = "us-west1"
 }
 
+variable "user_name" {
+  type        = string
+  description = "user name"
+  default     = "produser"
+}
+
 variable "db_name" {
   type        = string
   description = "database name"
@@ -18,7 +24,7 @@ variable "db_password" {
 
 resource "google_sql_database" "database" {
   project  = "composite-keel-269505"
-  name     = "trippin-database"
+  name     = var.db_name
   instance = google_sql_database_instance.master.name
 }
 

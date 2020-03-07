@@ -1,7 +1,20 @@
 locals {
   repository = "gcr.io/composite-keel-269505/trippin"
-  image_tag  = "9a442be8769c9ec2f43008b3898c72b9e42f9fec"
-  chart_tag  = "0.1.0"
+  image_tag  = "45b6c54fe221c55ebda38acc74ec7491e7b164e9"
+  chart_tag  = "0.2.0"
+}
+
+resource "kubernetes_secret" "postgres-credentials" {
+  metadata {
+    name = "postgres-credentials"
+  }
+
+  data = {
+    user = "trippin-database-postgres"
+    password = "postpass"
+  }
+
+  type = "kubernetes.io/basic-auth"
 }
 
 resource "helm_release" "auth" {
@@ -19,11 +32,17 @@ resource "helm_release" "auth" {
 
   values = [
     <<EOF
+service:
+  type: LoadBalancer
 global:
+  postgresHost: 10.79.224.3
+  postgresDB: trippin-database-postgres
   service:
     type: NodePort
     port: 8080
   image:
+    repository: "${local.repository}"
+    tag: "${local.image_tag}"
     pullPolicy: IfNotPresent
   replicaCount: 1
   charts:

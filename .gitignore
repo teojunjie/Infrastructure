@@ -3,3 +3,4 @@ service_account.json
 terraform.tfstate
 terraform.tfstate.backup
 .terraform.tfstate.lock.info
+*.json
