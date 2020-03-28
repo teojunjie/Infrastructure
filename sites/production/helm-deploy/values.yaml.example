@@ -1,0 +1,55 @@
+service:
+  type: LoadBalancer
+global:
+  certmanager: 
+    email: xxx@gmail.com
+  repository: gcr.io/composite-keel-269505/trippin
+  env: prod
+  postgres:
+    secret: postgres-credentials
+    host: postgres-svc
+  redis:
+    host: redis-service
+  gcpApi:
+    secret: gcp-api-credentials
+postgres:
+  volume: postgres-volume-mount
+  db: trippin-database-postgres
+  pvc: postgres-pvc
+  replicaCount: 1
+  image:
+    repository: postgres
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 5432
+  credentials:
+    user: ZGphbmdv
+    password: xxx
+  mountPath: /var/lib/postgresql/data 
+  resources: 
+    limits:
+      cpu: 200m
+      memory: 800Mi
+    requests:
+      cpu: 200m
+      memory: 800Mi
+auth:
+  hostname: xxx.ngrok.io
+  replicaCount: 1
+  image:
+    repository: ""
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  resources: 
+    limits:
+      cpu: 100m
+      memory: 300Mi
+    requests:
+      cpu: 100m
+      memory: 280Mi
+  credentials:
+    placesApi:
+      token: xxx
